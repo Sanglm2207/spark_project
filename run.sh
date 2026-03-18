@@ -106,6 +106,12 @@ run_join_demo() {
     python -m src.jobs.join_demo
 }
 
+# Lab 7
+run_most_popular_superhero() {
+    header "Job: Most Popular Superhero"
+    python -m src.jobs.most_popular_superhero
+}
+
 run_clean() {
     header "Dọn cache"
     find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
@@ -133,8 +139,9 @@ while true; do
     echo -e "  ${CYAN}14${RESET} Job: Aggregation Demo"
     echo -e "  ${CYAN}15${RESET} Job: Window Function Demo"
     echo -e "  ${CYAN}16${RESET} Job: Join Demo"
-    echo -e "  ${CYAN}17${RESET}  Install dependencies"
-    echo -e "  ${CYAN}18${RESET}  Clean __pycache__"
+    echo -e "  ${CYAN}17${RESET} Job: Most Popular Superhero"
+    echo -e "  ${CYAN}18${RESET}  Install dependencies"
+    echo -e "  ${CYAN}19${RESET}  Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -156,9 +163,10 @@ while true; do
         14) run_agg_demo ;;
         15) run_windowing_demo ;;
         16) run_join_demo ;;
-        17) run_install ;;
-        18) run_clean ;;
+        17) run_most_popular_superhero ;;
+        18) run_install ;;
+        19) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-18 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-19 hoặc q" ;;
     esac
 done
