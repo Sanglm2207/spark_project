@@ -69,10 +69,25 @@ run_spark_sql_table_demo() {
     python -m src.jobs.spark_sql_table_demo
 }
 
-run_install() {
-    header "Cài dependencies"
-    pip install -r requirements.txt
-    ok "Done!"
+# Lab 5
+row_demo() {
+    header "Job: Row Demo"
+    python -m src.jobs.row_demo
+}
+
+run_log_file_demo() {
+    header "Job: Log File Demo"
+    python -m src.jobs.log_file_demo
+}
+
+run_column_demo() {
+    header "Job: Column Demo"
+    python -m src.jobs.column_demo
+}
+
+run_udf_demo() {
+    header "Job: UDF Demo"
+    python -m src.jobs.udf_demo
 }
 
 run_clean() {
@@ -95,8 +110,12 @@ while true; do
     echo -e "  ${CYAN}7${RESET}  Job: Flight Source and Sink"
     echo -e "  ${CYAN}8${RESET}  Job: Hello SparkSQL"
     echo -e "  ${CYAN}9${RESET}  Job: SparkSQL Table Demo"
-    echo -e "  ${CYAN}10${RESET}  Install dependencies"
-    echo -e "  ${CYAN}11${RESET}  Clean __pycache__"
+    echo -e "  ${CYAN}10${RESET} Job: Row Demo"
+    echo -e "  ${CYAN}11${RESET} Job: Log File Demo"
+    echo -e "  ${CYAN}12${RESET} Job: Column Demo"
+    echo -e "  ${CYAN}13${RESET} Job: UDF Demo"
+    echo -e "  ${CYAN}14${RESET}  Install dependencies"
+    echo -e "  ${CYAN}15${RESET}  Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -111,9 +130,13 @@ while true; do
         7) run_flight_source_sink ;;
         8) run_hello_spark_sql ;;
         9) run_spark_sql_table_demo ;;
-        10) run_install ;;
-        11) run_clean ;;
+        10) row_demo ;;
+        11) run_log_file_demo ;;
+        12) run_column_demo ;;
+        13) run_udf_demo ;;
+        14) run_install ;;
+        15) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-11 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-15 hoặc q" ;;
     esac
 done

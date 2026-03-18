@@ -7,11 +7,19 @@ keeping config consistent and easy to change in one place.
 
 from __future__ import annotations
 
+import os
+import sys
 from typing import Literal
 
 from pyspark.sql import SparkSession
 
 Env = Literal["local", "cluster"]
+
+# Force Spark workers to use the same Python interpreter as the driver —
+# without this, workers may pick up the system Python (e.g. Xcode's 3.9)
+# instead of the active conda env, causing import errors on PySpark 4.x
+os.environ["PYSPARK_PYTHON"]        = sys.executable
+os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
 
 
 def get_spark(app_name: str = "SparkApp", env: Env = "local") -> SparkSession:
