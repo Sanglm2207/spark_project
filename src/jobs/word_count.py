@@ -1,6 +1,7 @@
 """
 Job: Word Count
 Classic Spark example — count word frequency across lines of text.
+Uses regex splitting to handle punctuation and multiple spaces.
 
 Run:             python -m src.jobs.word_count
 Run with file:   python -m src.jobs.word_count data/input/text.txt
@@ -16,6 +17,10 @@ from src.utils import get_spark, get_logger
 
 log = get_logger(__name__)
 
+# Matches any sequence of non-word characters (spaces, punctuation, tabs) —
+# more robust than splitting on a single space
+WORD_SPLIT_REGEX = "\\W+"
+
 
 def run(input_path: str | None = None) -> None:
     spark = get_spark("WordCount")
@@ -30,19 +35,23 @@ def run(input_path: str | None = None) -> None:
         ]
         # pyspark-stubs does not yet support PySpark 4.x —
         # createDataFrame overloads are unresolvable until stubs are updated
-        df = spark.createDataFrame(data) # type: ignore[arg-type]
+        df = spark.createDataFrame(data)  # type: ignore[arg-type]
     else:
         df = spark.read.text(input_path).withColumnRenamed("value", "line")
 
     result = (
         df
-        # Split each line into individual words
-        .select(F.explode(F.split(F.col("line"), " ")).alias("word"))
-        # Drop empty strings produced by consecutive spaces
+        # Regex split handles punctuation, tabs, and multiple consecutive spaces —
+        # e.g. "hello,world" → ["hello", "world"], not ["hello,world"]
+        .select(F.explode(F.split(F.col("line"), WORD_SPLIT_REGEX)).alias("word"))
+        # Normalize to lowercase so "Spark" and "spark" count as the same word
+        .select(F.lower(F.col("word")).alias("word"))
+        # Drop empty strings produced by leading/trailing delimiters
         .filter(F.col("word") != "")
         .groupBy("word")
         .agg(F.count("*").alias("count"))
-        .orderBy(F.col("count").desc())
+        # Primary sort: frequency descending, secondary: alphabetical for tie-breaking
+        .orderBy(F.col("count").desc(), F.col("word").asc())
     )
 
     log.info("Top words:")
