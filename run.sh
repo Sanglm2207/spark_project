@@ -43,6 +43,11 @@ run_rating_counter() {
     python -m src.jobs.ratings_counter
 }
 
+run_avg_friends() {
+    header "Job: Average Friends by Age"
+    python -m src.jobs.avg_friends_by_age
+}
+
 run_install() {
     header "Cài dependencies"
     pip install -r requirements.txt
@@ -64,8 +69,9 @@ while true; do
     echo -e "  ${CYAN}2${RESET}  Job: Word Count"
     echo -e "  ${CYAN}3${RESET}  Job: Sales Aggregation"
     echo -e "  ${CYAN}4${RESET}  Job: Ratings Histogram (MovieLens)"
-    echo -e "  ${CYAN}5${RESET}  Install dependencies"
-    echo -e "  ${CYAN}6${RESET}  Clean __pycache__"
+    echo -e "  ${CYAN}5${RESET}  Job: Average Friends by Age"
+    echo -e "  ${CYAN}6${RESET}  Install dependencies"
+    echo -e "  ${CYAN}7${RESET}  Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -75,9 +81,10 @@ while true; do
         2) run_word_count ;;
         3) run_sales_agg ;;
         4) run_rating_counter ;;
-        5) run_install ;;
-        6) run_clean ;;
+        5) run_avg_friends ;;
+        6) run_install ;;
+        7) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-5 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-7 hoặc q" ;;
     esac
 done
