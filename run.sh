@@ -131,6 +131,19 @@ run_kafka_producer() {
     python src/utils/kafka_producer.py
 }
 
+# Lab 10
+run_tumbling_window_demo() {
+    header "Job: Tumbling Window Demo (Kafka)"
+    info "Đảm bảo Kafka đang chạy: docker-compose up -d"
+    python -m src.jobs.tumbling_window_demo
+}
+ 
+run_kafka_trades_producer() {
+    header "Kafka Trades Producer"
+    info "Đảm bảo Kafka đang chạy: docker-compose up -d"
+    python src/utils/kafka_trades_producer.py
+}
+
 run_install() { 
     header "Cài dependencies"; 
     pip install -r requirements.txt;
@@ -169,8 +182,10 @@ while true; do
     echo -e "  ${CYAN}18${RESET} Job: File Stream Demo"
     echo -e "  ${CYAN}19${RESET} Job: Multi Query Demo (Kafka)"
     echo -e "  ${CYAN}20${RESET} Kafka Producer"
-    echo -e "  ${CYAN}21${RESET} Install dependencies"
-    echo -e "  ${CYAN}22${RESET} Clean __pycache__"
+    echo -e "  ${CYAN}21${RESET} Kafka Trades Producer"
+    echo -e "  ${CYAN}22${RESET} Job: Tumbling Window Demo (Kafka)"
+    echo -e "  ${CYAN}23${RESET} Install dependencies"
+    echo -e "  ${CYAN}24${RESET} Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -196,9 +211,11 @@ while true; do
         18) run_file_stream_demo ;;
         19) run_multi_query_demo ;;
         20) run_kafka_producer ;;
-        21) run_install ;;
-        22) run_clean ;;
+        21) run_kafka_trades_producer ;;
+        22) run_tumbling_window_demo ;;
+        23) run_install ;;
+        24) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-22 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-24 hoặc q" ;;
     esac
 done
