@@ -53,6 +53,11 @@ run_min_temperature() {
     python -m src.jobs.min_temperatures
 }
 
+run_flight_source_sink() {
+    header "Job: Flight Source and Sink"
+    python -m src.jobs.flight_source_sink
+}
+
 run_install() {
     header "Cài dependencies"
     pip install -r requirements.txt
@@ -76,8 +81,9 @@ while true; do
     echo -e "  ${CYAN}4${RESET}  Job: Ratings Histogram (MovieLens)"
     echo -e "  ${CYAN}5${RESET}  Job: Average Friends by Age"
     echo -e "  ${CYAN}6${RESET}  Job: Minimum Temperatures"
-    echo -e "  ${CYAN}7${RESET}  Install dependencies"
-    echo -e "  ${CYAN}8${RESET}  Clean __pycache__"
+    echo -e "  ${CYAN}7${RESET}  Job: Flight Source and Sink"
+    echo -e "  ${CYAN}8${RESET}  Install dependencies"
+    echo -e "  ${CYAN}9${RESET}  Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -89,9 +95,10 @@ while true; do
         4) run_rating_counter ;;
         5) run_avg_friends ;;
         6) run_min_temperature ;;
-        7) run_install ;;
-        8) run_clean ;;
+        7) run_flight_source_sink ;;
+        8) run_install ;;
+        9) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-8 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-9 hoặc q" ;;
     esac
 done
