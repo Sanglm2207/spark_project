@@ -58,6 +58,17 @@ run_flight_source_sink() {
     python -m src.jobs.flight_source_sink
 }
 
+# Lab 4
+run_hello_spark_sql() {
+    header "Job: Hello SparkSQL"
+    python -m src.jobs.hello_spark_sql
+}
+
+run_spark_sql_table_demo() {
+    header "Job: SparkSQL Table Demo"
+    python -m src.jobs.spark_sql_table_demo
+}
+
 run_install() {
     header "Cài dependencies"
     pip install -r requirements.txt
@@ -82,8 +93,10 @@ while true; do
     echo -e "  ${CYAN}5${RESET}  Job: Average Friends by Age"
     echo -e "  ${CYAN}6${RESET}  Job: Minimum Temperatures"
     echo -e "  ${CYAN}7${RESET}  Job: Flight Source and Sink"
-    echo -e "  ${CYAN}8${RESET}  Install dependencies"
-    echo -e "  ${CYAN}9${RESET}  Clean __pycache__"
+    echo -e "  ${CYAN}8${RESET}  Job: Hello SparkSQL"
+    echo -e "  ${CYAN}9${RESET}  Job: SparkSQL Table Demo"
+    echo -e "  ${CYAN}10${RESET}  Install dependencies"
+    echo -e "  ${CYAN}11${RESET}  Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -96,9 +109,11 @@ while true; do
         5) run_avg_friends ;;
         6) run_min_temperature ;;
         7) run_flight_source_sink ;;
-        8) run_install ;;
-        9) run_clean ;;
+        8) run_hello_spark_sql ;;
+        9) run_spark_sql_table_demo ;;
+        10) run_install ;;
+        11) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-9 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-11 hoặc q" ;;
     esac
 done
