@@ -21,7 +21,6 @@ CHECKPOINT_DIR = "data/output/chk-point-dir"
 
 
 def run() -> None:
-    # Structured Streaming needs more cores than default local[*] for concurrent read/write
     # stopGracefullyOnShutdown — wait for current batch to finish before stopping
     # schemaInference — infer schema from JSON files automatically
     spark = get_spark("FileStreamDemo")
@@ -30,7 +29,6 @@ def run() -> None:
 
     log.header("Job: File Stream Demo")
 
-    # ── Read streaming source ────────────────────────────
     # maxFilesPerTrigger — process at most 1 file per batch
     # to simulate real-time ingestion one file at a time
     raw_df = (
@@ -41,8 +39,7 @@ def run() -> None:
              .load()
     )
 
-    # ── Flatten InvoiceLineItems array ───────────────────
-    # explode — turns each element of the array into a separate row
+    # explode — turns each element of InvoiceLineItems array into a separate row
     explode_df = raw_df.selectExpr("explode(InvoiceLineItems) as LineItem")
 
     # Extract nested struct fields into top-level columns
@@ -56,8 +53,7 @@ def run() -> None:
         .drop("LineItem")
     )
 
-    # ── Write streaming sink ─────────────────────────────
-    # outputMode append — only write new rows each batch (no updates)
+    # outputMode append — only write new rows each batch
     # trigger processingTime — wait 1 minute between each batch
     # checkpointLocation — tracks progress so stream can resume after failure
     invoice_writer_query = (
@@ -72,9 +68,18 @@ def run() -> None:
     )
 
     log.ok("Flattened Invoice Writer started")
+    log.info("Press Ctrl+C to stop")
 
-    # awaitTermination — block until stream is stopped manually or on error
-    invoice_writer_query.awaitTermination()
+    try:
+        # Block until stream is stopped manually or on error
+        invoice_writer_query.awaitTermination()
+    except KeyboardInterrupt:
+        # stop gracefully so the current batch finishes before shutting down
+        log.warn("Stopping stream...")
+        invoice_writer_query.stop()
+        log.ok("Stream stopped.")
+    finally:
+        spark.stop()
 
 
 if __name__ == "__main__":
