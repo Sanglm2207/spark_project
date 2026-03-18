@@ -31,3 +31,6 @@ spark-warehouse/
 
 # ── macOS ────────────────────────────────────────────────
 .DS_Store
+
+# Kafka/Docker outputs
+data/output/chk-*/

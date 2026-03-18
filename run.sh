@@ -118,6 +118,26 @@ run_file_stream_demo() {
     python -m src.jobs.file_stream_demo
 }
 
+# Lab 9
+run_multi_query_demo() {
+    header "Job: Multi Query Demo (Kafka)"
+    info "Đảm bảo Kafka đang chạy: docker-compose up -d"
+    python -m src.jobs.multi_query_demo
+}
+
+run_kafka_producer() {
+    header "Kafka Producer"
+    info "Đảm bảo Kafka đang chạy: docker-compose up -d"
+    python src/utils/kafka_producer.py
+}
+
+run_install() { 
+    header "Cài dependencies"; 
+    pip install -r requirements.txt;
+    ok "Done!"; 
+}
+
+
 run_clean() {
     header "Dọn cache"
     find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
@@ -147,8 +167,10 @@ while true; do
     echo -e "  ${CYAN}16${RESET} Job: Join Demo"
     echo -e "  ${CYAN}17${RESET} Job: Most Popular Superhero"
     echo -e "  ${CYAN}18${RESET} Job: File Stream Demo"
-    echo -e "  ${CYAN}19${RESET}  Install dependencies"
-    echo -e "  ${CYAN}20${RESET}  Clean __pycache__"
+    echo -e "  ${CYAN}19${RESET} Job: Multi Query Demo (Kafka)"
+    echo -e "  ${CYAN}20${RESET} Kafka Producer"
+    echo -e "  ${CYAN}21${RESET} Install dependencies"
+    echo -e "  ${CYAN}22${RESET} Clean __pycache__"
     echo -e "  ${CYAN}q${RESET}  Exit \n"
 
     read -rp "  Chọn: " choice
@@ -172,9 +194,11 @@ while true; do
         16) run_join_demo ;;
         17) run_most_popular_superhero ;;
         18) run_file_stream_demo ;;
-        19) run_install ;;
-        20) run_clean ;;
+        19) run_multi_query_demo ;;
+        20) run_kafka_producer ;;
+        21) run_install ;;
+        22) run_clean ;;
         q|Q) echo -e "\n  Bye!\n"; exit 0 ;;
-        *) error "Không hợp lệ — chọn 1-20 hoặc q" ;;
+        *) error "Không hợp lệ — chọn 1-22 hoặc q" ;;
     esac
 done
